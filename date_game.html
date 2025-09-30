@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hiiiiii</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { --gap: 140px; --min-dist: 220; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Candara, Oswald, sans-serif;
+      background: #fffafc;
+      overflow: hidden;
+    }
+
+    p {
+      font-size: clamp(22px, 4vw, 32px);
+      text-align: center;
+      margin: 0 16px 8px;
+    }
+
+    img {
+      width: min(320px, 40vw);
+      margin: 16px 0;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--gap);
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      transition: transform .2s ease, box-shadow .2s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,.08);
+      white-space: nowrap;
+    }
+
+    #botao1 {
+      background: #ff5fa2;
+      color: #fff;
+    }
+    #botao1:hover { transform: translateY(-2px) scale(1.02); }
+
+    #botao2 {
+      position: fixed;
+      background: #ccc;
+      color: #111;
+      z-index: 2;
+      top: 70%;
+      left: 70%;
+      transform: translate(-50%, -50%);
+      touch-action: none;
+    }
+
+    .emoji {
+      position: fixed;
+      font-size: 32px;
+      animation: fall 1.8s linear forwards;
+      pointer-events: none;
+      z-index: 3;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(-20px); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <p>I miss u, lets have a date soon lah</p>
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ_IuwttfcWT-b7RddywKlJ8OM60KB1KCOBQ&s" alt="cute puppy">
+
+  <div class="buttons">
+    <button id="botao1">YES BABY!</button>
+  </div>
+
+  <button id="botao2">NO</button>
+
+  <script>
+    const yesBtn = document.getElementById('botao1');
+    const noBtn  = document.getElementById('botao2');
+
+    function moveNoAway() {
+      const pad = 12;
+      const minDist = parseInt(getComputedStyle(document.documentElement)
+                        .getPropertyValue('--min-dist')) || 220;
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const nbW = noBtn.offsetWidth;
+      const nbH = noBtn.offsetHeight;
+
+      const maxX = vw - nbW - pad;
+      const maxY = vh - nbH - pad;
+
+      const yesRect = yesBtn.getBoundingClientRect();
+
+      let x, y, ok = false, tries = 0;
+      while (!ok && tries < 20) {
+        x = Math.floor(pad + Math.random() * (maxX - pad));
+        y = Math.floor(pad + Math.random() * (maxY - pad));
+
+        const noCx = x + nbW / 2;
+        const noCy = y + nbH / 2;
+
+        const yesCx = yesRect.left + yesRect.width / 2;
+        const yesCy = yesRect.top  + yesRect.height / 2;
+
+        const dx = noCx - yesCx;
+        const dy = noCy - yesCy;
+        const dist = Math.hypot(dx, dy);
+
+        ok = dist >= minDist;
+        tries++;
+      }
+
+      noBtn.style.left = x + 'px';
+      noBtn.style.top  = y + 'px';
+      noBtn.style.transform = 'translate(0,0)';
+    }
+
+    noBtn.addEventListener('mouseenter', moveNoAway);
+    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoAway(); }, {passive:false});
+    window.addEventListener('resize', moveNoAway);
+
+    yesBtn.addEventListener('click', () => {
+      alert('YAYY THANK U BÉ AN 💖');
+    });
+
+    noBtn.addEventListener('click', () => {
+      for (let i = 0; i < 14; i++) {
+        const emoji = document.createElement('span');
+        emoji.className = 'emoji';
+        emoji.textContent = '😢';
+        emoji.style.left = Math.floor(Math.random() * window.innerWidth) + 'px';
+        emoji.style.top = '-30px';
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 2000);
+      }
+      moveNoAway();
+    });
+
+    window.addEventListener('load', moveNoAway);
+  </script>
+</body>
+</html>
