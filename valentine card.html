@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Thiệp Valentine</title>
+
 <style>
 body{
     margin:0;
@@ -15,7 +16,11 @@ body{
     text-align:center;
     overflow:hidden;
 }
+
+/* Khung thiệp */
 .container{
+    position:relative;
+    z-index:2;
     background:white;
     padding:40px;
     border-radius:20px;
@@ -23,6 +28,7 @@ body{
     max-width:400px;
     animation:fadeIn 1.5s ease;
 }
+
 button{
     padding:12px 25px;
     background:#ff4d6d;
@@ -32,21 +38,49 @@ button{
     cursor:pointer;
     font-size:16px;
 }
+
 button:hover{
     background:#e60039;
 }
+
 @keyframes fadeIn{
     from{opacity:0; transform:translateY(20px);}
     to{opacity:1; transform:translateY(0);}
 }
+
+/* Trái tim */
 .heart{
     position:absolute;
     color:red;
     animation:float 6s infinite;
+    z-index:1;
 }
+
 @keyframes float{
     0%{transform:translateY(0);}
     100%{transform:translateY(-800px);}
+}
+
+/* Xoài */
+.mango{
+    position:absolute;
+    animation:mangoFloat 12s linear infinite;
+    opacity:0.8;
+    z-index:0;
+}
+
+@keyframes mangoFloat{
+    0%{
+        transform: translateY(100vh) rotate(0deg);
+        opacity:0;
+    }
+    10%{
+        opacity:0.8;
+    }
+    100%{
+        transform: translateY(-120px) rotate(360deg);
+        opacity:0;
+    }
 }
 </style>
 </head>
@@ -55,8 +89,12 @@ button:hover{
 
 <div class="container" id="card">
     <h2>💖 Gửi bé Kịt 💖</h2>
-    <p>Will you be my valentine this year bbi?<br>
-It's been 4 months and we have been through ups and downs, even after that, I still want you to be my valentine for this year and for years forever after.</p>
+    <p>
+        Will you be my valentine this year bbi?<br>
+        It's been 4 months and we have been through ups and downs,
+        even after that, I still want you to be my valentine
+        for this year and for years forever after.
+    </p>
     <button onclick="openCard()">Bấm vào đây</button>
 </div>
 
@@ -64,13 +102,16 @@ It's been 4 months and we have been through ups and downs, even after that, I st
 function openCard(){
     document.getElementById("card").innerHTML = `
         <h2>Happy Valentine ❤️</h2>
-        <p>Anh thương bé Kịt rất nhiều. <br>
-	 Cảm ơn vì đã đồng hành cùng anh nha bé và mong là tụi mình sẽ đồng hành cùng nhau lâu thật lâu</p>
+        <p>
+            Anh thương bé Kịt rất nhiều. <br>
+            Cảm ơn vì đã đồng hành cùng anh nha bé và mong là tụi mình
+            sẽ đồng hành cùng nhau lâu thật là lâu nhé <3
+        </p>
         <img src="ảnh đôi.jpg" style="max-width:100%; height:auto;" width="250">
-
     `;
 }
 
+/* Trái tim bay */
 setInterval(()=>{
     let heart=document.createElement("div");
     heart.innerHTML="❤️";
@@ -80,6 +121,17 @@ setInterval(()=>{
     document.body.appendChild(heart);
     setTimeout(()=>heart.remove(),6000);
 },500);
+
+/* Xoài bay nền */
+setInterval(()=>{
+    let mango=document.createElement("div");
+    mango.innerHTML="🥭";
+    mango.className="mango";
+    mango.style.left=Math.random()*100+"vw";
+    mango.style.fontSize=Math.random()*30+30+"px";
+    document.body.appendChild(mango);
+    setTimeout(()=>mango.remove(),12000);
+},1500);
 </script>
 
 </body>
